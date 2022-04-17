@@ -1,0 +1,104 @@
+CREATE DATABASE store;
+create table countries(
+code int primary key not null,
+name varchar(20)not null unique,
+countinent_name varchar(20) not null unique
+);
+create table users(
+id int primary key not null,
+full_name varchar(20)not null,
+email varchar(20) unique,
+gender char(1) check(gender='m' or gender='f')not null,
+date_of_birth varchar(15)not null,
+created_at datetime,
+country_code int unique,
+ foreign key(country_code) references country(code)
+);
+
+create table orders(
+id int  primary key not null unique,
+user_id int,
+foreign key(user_id) references user(id),
+status varchar(6),
+created_at datetime
+);
+create table order_products(
+order_id int  primary key  null,
+prodduct_id  int primary key  not null unique,
+quantity int default 0,
+primary key(order_id,proudect_id),
+foreign key (order_id) references orders(id),
+foreign key (order_id) references products(id)
+);
+create table products(
+id int primary key not null,
+name varchar(10)not null,
+price int ,
+status varchar(10),
+created_at datetime
+);
+/*countries*/
+
+alter table countries
+modify name int not null;
+
+alter table countries
+add unique (continent_name);
+
+/*users*/
+alter table users
+add unique (email);
+
+alter table users
+add check (gender in('m','f'));
+
+/*orders*/
+alter table orders
+add check (status in('start','finish'));
+
+/*order_products*/
+alter table order_products
+alter quantity set default(0);
+
+/*products*/
+alter table products
+alter price set default(0);
+
+alter table products
+modify name int not null;
+
+alter table products
+add check (status in('valid','expired'));
+
+/*bouns*/
+alter table countries
+modify column created_at datetime default current_timestamp;
+
+alter table users
+modify column created_at datetime default current_timestamp;
+
+alter table orders
+modify column created_at datetime default current_timestamp;
+
+alter table order_products
+modify column created_at datetime default current_timestamp;
+
+alter table prouducts
+modify column created_at datetime default current_timestamp;
+
+/*inser*/
+
+insert into countries values('22','nedaa','mqubl');
+
+insert into users values('22','nedaa','nedaa55@icloud.com','n','1997','3','88');
+
+insert into orders values('2','4','start','2');
+
+insert into prouducts values('5','fox','5','valid','4');
+
+insert into order_products values('2','3','7');
+
+/*dml update*/
+update  countries set name='nedaa' where id='888';
+/*dml deletE*/
+delete from prouducts where id='5';
